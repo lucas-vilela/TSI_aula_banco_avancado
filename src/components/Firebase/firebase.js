@@ -37,7 +37,7 @@ class Firebase {
                 console.log('Criado no autentication.')
                 this.credentials = userCredential.user;
                 console.log(this.credentials)  
-                push(ref(this.db,'users/'),{'email':this.credentials.email,'ID':this.credentials.uid})
+                push(ref(this.db,'users/'),{'email':this.credentials.email,'ID_Authentication':this.credentials.uid})
                 .then(()=>{
                     console.log('Armazenado no realtime.')
                 })
@@ -45,15 +45,15 @@ class Firebase {
                     console.log('Erro na parte do realtime: ' + e)
                     deleteUser(this.auth.currentUser)
                     .then(()=>{
-                        console.log('Usuário deletado do atentication.')
+                        console.log('Usuário deletado do athentication.')
                     })
                     .catch((e)=>{
-                        console.log('Erro ao deletar usuário do autentication: '+e)
+                        console.log('Erro ao deletar usuário do authentication: '+e)
                     })
                 })
             })
             .catch(e=>{
-                console.log('Erro na parte do atutentication: ' + e)
+                console.log('Erro na parte do althentication: ' + e)
             })
 
            //throw new Error("Função indisponível") //remova essa linha

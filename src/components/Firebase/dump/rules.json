@@ -1,0 +1,10 @@
+{
+    "rules": {
+      ".read": true,
+      ".write": true,
+      "produtos": {
+          ".write":"root.child('users').child('admin').exists()",
+          ".indexOn": ["preco","nome"] 
+      }
+    }
+  }
