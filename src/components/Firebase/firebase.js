@@ -1,9 +1,10 @@
 import { initializeApp } from 'firebase/app'
 import {
-    getAuth, signInWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    getAuth, signInWithEmailAndPassword,deleteUser
 } from 'firebase/auth';
 import {
-    getDatabase
+    getDatabase, push,ref
 } from "firebase/database"
 // import { getAuth } from 'firebase/auth';
 
@@ -30,8 +31,32 @@ class Firebase {
     // *** AUTH API ***
     async doCreateUserWithEmailAndPassword(email, password) {
         try {
-           //implemente aqui a função para criar um usuário
-           throw new Error("Função indisponível") //remova essa linha
+           
+            createUserWithEmailAndPassword(this.auth,email,password)
+            .then((userCredential)=>{
+                console.log('Criado no autentication.')
+                this.credentials = userCredential.user;
+                console.log(this.credentials)  
+                push(ref(this.db,'users/'),{'email':this.credentials.email,'ID':this.credentials.uid})
+                .then(()=>{
+                    console.log('Armazenado no realtime.')
+                })
+                .catch(e=>{
+                    console.log('Erro na parte do realtime: ' + e)
+                    deleteUser(this.auth.currentUser)
+                    .then(()=>{
+                        console.log('Usuário deletado do atentication.')
+                    })
+                    .catch((e)=>{
+                        console.log('Erro ao deletar usuário do autentication: '+e)
+                    })
+                })
+            })
+            .catch(e=>{
+                console.log('Erro na parte do atutentication: ' + e)
+            })
+
+           //throw new Error("Função indisponível") //remova essa linha
         } catch (error) {
             console.error(error.message)
             throw error;
