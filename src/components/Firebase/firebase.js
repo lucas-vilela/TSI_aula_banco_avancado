@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import {
-    getAuth
+    getAuth, signInWithEmailAndPassword
 } from 'firebase/auth';
 import {
     getDatabase
@@ -40,13 +40,19 @@ class Firebase {
 
     async doSignInWithEmailAndPassword(email, password) {
         try {
+            //console.error([email, password])
             /**
             Quando o usuário estiver logado atribua o valor TRUE
             ao atributo this.isLogged e as credenciais ao atributo this.credentials
-            deverá retornar a propriedade user do atributo this.credentials
             */
            //implemente aqui função logar o usuario
-           throw new Error("Função Indisponível!!") //remova essa linha
+
+            this.credentials = await signInWithEmailAndPassword(this.auth,email,password)
+            if(this.credentials)
+            this.isLogged = true
+            console.error(this.credentials)
+            return this.credentials.user
+           //throw new Error("Função Indisponível!!") //remova essa linha
         } catch (error) {
             console.error(error.message)
             throw error;
