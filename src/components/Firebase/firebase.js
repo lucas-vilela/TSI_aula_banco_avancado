@@ -1,10 +1,10 @@
 import { initializeApp } from 'firebase/app'
 import {
     createUserWithEmailAndPassword,
-    getAuth, signInWithEmailAndPassword,deleteUser
+    getAuth, signInWithEmailAndPassword,deleteUser, signOut
 } from 'firebase/auth';
 import {
-    getDatabase, push,ref
+    getDatabase, set,ref
 } from "firebase/database"
 // import { getAuth } from 'firebase/auth';
 
@@ -37,15 +37,18 @@ class Firebase {
                 console.log('Criado no autentication.')
                 this.credentials = userCredential.user;
                 console.log(this.credentials)  
-                push(ref(this.db,'users/'),{'email':this.credentials.email,'ID_Authentication':this.credentials.uid})
+                //fazer com o set concatenando com o auth.uid como chave
+                set(ref(this.db,'users/'+ this.credentials.uid),{'email':this.credentials.email,'ID_Authentication':this.credentials.uid})
                 .then(()=>{
                     console.log('Armazenado no realtime.')
                 })
                 .catch(e=>{
                     console.log('Erro na parte do realtime: ' + e)
+                    //this.credentials = null
                     deleteUser(this.auth.currentUser)
                     .then(()=>{
                         console.log('Usuário deletado do athentication.')
+                        this.credentials = null
                     })
                     .catch((e)=>{
                         console.log('Erro ao deletar usuário do authentication: '+e)
@@ -53,6 +56,7 @@ class Firebase {
                 })
             })
             .catch(e=>{
+                console.log(e.message)
                 console.log('Erro na parte do althentication: ' + e)
             })
 
@@ -85,6 +89,7 @@ class Firebase {
     }
 
     doSignOut = () => {
+        signOut(this.auth)
     };
 }
 

@@ -1,10 +1,12 @@
 {
-    "rules": {
-      ".read": true,
-      ".write": true,
-      "produtos": {
-          ".write":"root.child('users').child('admin').exists()",
-          ".indexOn": ["preco","nome"] 
+  "rules": {
+    ".read": true,
+    "produtos": {
+        ".write":"root.child('users/'+auth.uid+'/admin' ).exists()",
+        ".indexOn": ["preco","nome"] 
+    },
+      "users": {
+        ".write" : true
       }
-    }
   }
+}
